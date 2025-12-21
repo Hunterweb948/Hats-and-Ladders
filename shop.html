@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hat Packs Shop</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="hat-emoji">🎩</span>
+    <h1>Hats & Ladders</h1>
+  </div>
+  <nav>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="events.html" class="nav-link">Events</a>
+    <a href="shop.html" class="nav-link active">Shop</a>
+    <a href="profile.html" class="nav-link">Profile</a>
+    <a href="login.html" class="login-btn">Login</a>
+  </nav>
+</header>
+
+<div class="coin-bar">
+  🪙 Xp Coins: <span id="coinCount">100000</span>
+</div>
+
+<!-- ===== SHOP INTRO / HOW IT WORKS ===== -->
+<section class="shop-intro">
+  <h2>🎩 Welcome to the Hat Shop!</h2>
+
+  <p class="intro-text">
+    Use your <strong>XP Coins</strong> to buy Hat Packs and unlock cool cosmetic hats.
+    Each pack gives you <strong>5 random hats</strong> — higher packs mean better chances!
+  </p>
+
+  <div class="intro-steps">
+    <div class="step">
+      <span class="step-icon">🪙</span>
+      <p>Earn XP Coins by RSVP events and completing them</p>
+    </div>
+
+    <div class="step">
+      <span class="step-icon">🎁</span>
+      <p>Buy Hat Packs to unlock random hats</p>
+    </div>
+
+    <div class="step">
+      <span class="step-icon">✨</span>
+      <p>Rare & Legendary packs give cooler hats and special effects</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDER ===== -->
+<section class="pack-slider">
+  <button class="slider-arrow left" onclick="prevSlide()">‹</button>
+  <button class="slider-arrow right" onclick="nextSlide()">›</button>
+
+  <div class="slider-window">
+    <div class="slider-track" id="sliderTrack">
+
+      <div class="slide">
+        <h3>🎴 Common Pack</h3>
+        <div class="slide-hats">
+          <img src="images/hat1.png">
+          <img src="images/hat2.png">
+          <img src="images/hat15.png">
+        </div>
+        <p>Mostly Common Hats</p>
+      </div>
+
+      <div class="slide">
+        <h3>✨ Rare Pack</h3>
+        <div class="slide-hats">
+          <img src="images/hat12.png">
+          <img src="images/hat13.png">
+          <img src="images/hat18.png">
+        </div>
+        <p>Higher Rare Chances</p>
+      </div>
+
+      <div class="slide">
+        <h3>🔥 Legendary Pack</h3>
+        <div class="slide-hats">
+          <img src="images/hat28.png">
+          <img src="images/hat29.png">
+          <img src="images/hat30.png">
+        </div>
+        <p>Best Odds for Legendary Hats</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<main class="shop-container">
+  <h2 class="shop-title">Hat Packs</h2>
+  <p class="shop-subtitle">Each pack contains <strong>5 random hats</strong></p>
+
+  <div class="pack-grid">
+    <div class="pack-card">
+      <div class="pack-icon">🎴</div>
+      <h3>Common Hat Pack</h3>
+      <p>70% Common · 30% Rare</p>
+      <p class="price">100 Coins</p>
+      <button class="shop-btn" onclick="buyPack(100, 'common')">Buy Pack</button>
+    </div>
+
+    <div class="pack-card premium">
+      <div class="pack-icon">✨🎴</div>
+      <h3>Rare Hat Pack</h3>
+      <p>50% Common · 40% Rare · 10% Legendary</p>
+      <p class="price">550 Coins</p>
+      <button class="shop-btn" onclick="buyPack(550, 'rare')">Buy Pack</button>
+    </div>
+
+    <div class="pack-card legendary">
+      <div class="pack-icon">🔥🎴</div>
+      <h3>Legendary Hat Pack</h3>
+      <p>25% Common · 50% Rare · 25% Legendary</p>
+      <p class="price">1200 Coins</p>
+      <button class="shop-btn" onclick="buyPack(1200, 'legendary')">Buy Pack</button>
+    </div>
+  </div>
+</main>
+
+<div id="packModal" class="pack-modal hidden">
+  <div class="pack-content">
+    <h2>🎁 Pack Opened!</h2>
+    <div class="cards" id="cardsContainer"></div>
+    <button class="shop-btn" onclick="closePack()">Close</button>
+  </div>
+</div>
+
+<script src="shop.js"></script>
+</body>
+</html>
