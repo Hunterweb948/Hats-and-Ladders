@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events - Hats & Ladders</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Additional styles for enhanced filtering */
+    .filters-section {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1100px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+    
+    .filter-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--hunter-purple);
+      font-size: 0.9rem;
+    }
+    
+    .filter-select, .filter-input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      font-size: 0.95rem;
+      background: white;
+      transition: border 0.3s;
+    }
+    
+    .filter-select:focus, .filter-input:focus {
+      border-color: var(--hunter-purple);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(79, 45, 127, 0.1);
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .clear-btn {
+      background: #f0f0f0;
+      color: #666;
+      border: 2px solid #ddd;
+      padding: 12px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    
+    .clear-btn:hover {
+      background: #e0e0e0;
+    }
+    
+    .search-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    
+    .tag {
+      background: rgba(79, 45, 127, 0.1);
+      color: var(--hunter-purple);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .tag:hover {
+      background: rgba(79, 45, 127, 0.2);
+    }
+    
+    .tag.active {
+      background: var(--hunter-purple);
+      color: white;
+    }
+    
+    .event-card .event-reward {
+      display: inline-block;
+      background: linear-gradient(135deg, #4f2d7f, #7b56c6);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    
+    .keyword-highlight {
+      background-color: #fffacd;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    
+    .virtual-badge {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .inperson-badge {
+      display: inline-block;
+      background: #2196F3;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .xp-icon {
+      font-size: 1rem;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="logo">
+      <span class="hat-emoji">🎩</span>
+      <h1>Hats & Ladders</h1>
+    </div>
+
+    <nav>
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="events.html" class="nav-link active">Events</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+
+      <!-- Category filter in navbar -->
+      <div class="nav-filter">
+        <label class="sr-only" for="categoryFilter">Filter events by category</label>
+        <select id="categoryFilter" class="nav-select" aria-label="Filter events by category">
+          <option value="all">All Categories</option>
+          <option value="Financial Aid">Financial Aid</option>
+          <option value="Arts & Culture">Arts & Culture</option>
+          <option value="Professional">Professional</option>
+          <option value="Graduate Programs">Graduate Programs</option>
+          <option value="Alumni">Alumni</option>
+          <option value="Academic">Academic</option>
+        </select>
+      </div>
+
+      <a href="login.html" class="login-btn">Login</a>
+    </nav>
+  </header>
+
+  <!-- ===== Page Hero ===== -->
+  <section class="page-hero">
+    <h2>Hunter College Events 📅</h2>
+    <p>Attend events to earn XP points! Use your points to buy hats in the shop.</p>
+
+    <div class="events-tools">
+      <label class="sr-only" for="searchInput">Search events</label>
+      <input id="searchInput" class="events-search" type="search" placeholder="Search by title, location, organizer, or keywords…" />
+    </div>
+  </section>
+
+  <!-- ===== Advanced Filters ===== -->
+  <section class="filters-section">
+    <div class="filters-row">
+      <div class="filter-group">
+        <label class="filter-label">Date Range</label>
+        <select id="dateFilter" class="filter-select">
+          <option value="all">All Dates</option>
+          <option value="today">Today</option>
+          <option value="thisWeek">This Week</option>
+          <option value="nextWeek">Next Week</option>
+          <option value="thisMonth">This Month</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label class="filter-label">Event Type</label>
+        <select id="typeFilter" class="filter-select">
+          <option value="all">All Types</option>
+          <option value="workshop">Workshop</option>
+          <option value="helpdesk">Help Desk</option>
+          <option value="outing">Arts Outing</option>
+          <option value="meeting">Professional Meeting</option>
+          <option value="info-session">Information Session</option>
+          <option value="social">Networking Social</option>
+          <option value="lecture">Lecture</option>
+          <option value="fair">Fair</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label class="filter-label">Format</label>
+        <select id="formatFilter" class="filter-select">
+          <option value="all">All Formats</option>
+          <option value="virtual">Virtual/Online</option>
+          <option value="in-person">In-Person</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label class="filter-label">XP Points</label>
+        <select id="xpFilter" class="filter-select">
+          <option value="all">All XP Amounts</option>
+          <option value="low">50-100 XP</option>
+          <option value="medium">101-200 XP</option>
+          <option value="high">201+ XP</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="filter-buttons">
+      <button id="applyFilters" class="btn primary">Apply Filters</button>
+      <button id="clearAllFilters" class="btn clear-btn">Clear All</button>
+    </div>
+    
+    <div class="search-tags" id="searchTags">
+      <span class="tag" data-category="Financial Aid">Financial Aid</span>
+      <span class="tag" data-category="Arts & Culture">Arts & Culture</span>
+      <span class="tag" data-category="Graduate Programs">Graduate Programs</span>
+      <span class="tag" data-category="Alumni">Alumni Events</span>
+      <span class="tag" data-category="Academic">Academic/Lectures</span>
+      <span class="tag" data-search="FAFSA">FAFSA/TAP</span>
+      <span class="tag" data-search="information session">Info Sessions</span>
+      <span class="tag" data-xp="high">High XP Events</span>
+    </div>
+  </section>
+
+  <!-- ===== Events List ===== -->
+  <main class="events-wrap">
+    <section class="events-grid" id="eventsGrid" aria-live="polite"></section>
+
+    <div class="empty-state" id="emptyState" hidden>
+      <h3>No events match your search.</h3>
+      <p>Try changing your filters or clearing your search terms.</p>
+      <button class="btn primary" id="resetBtn" type="button">Reset All Filters</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Hats & Ladders | Built for CUNY Hunter College Students</p>
+  </footer>
+
+  <script>
+    // REAL Hunter College Events with XP Points System
+    const EVENTS = [
+      // ===== FINANCIAL AID EVENTS =====
+      {
+        title: "FAFSA/TAP Helpdesk - Virtual Mondays",
+        category: "Financial Aid",
+        date: "Mondays",
+        time: "Various times",
+        location: "Virtual - Zoom",
+        organizer: "Hunter Financial Aid Office",
+        desc: "Drop in for help with your FAFSA/TAP. Get your questions answered quickly by our Financial Aid staff. RSVP not required. Join virtual meeting at scheduled date/time.",
+        keywords: ["fafsa", "tap", "financial aid", "virtual", "helpdesk", "zoom", "monday"],
+        type: "helpdesk",
+        format: "virtual",
+        audience: "all-students",
+        xpPoints: 75
+      },
+      {
+        title: "FAFSA/TAP Helpdesk In-person Wednesdays",
+        category: "Financial Aid",
+        date: "Wednesdays",
+        time: "Various times",
+        location: "Financial Aid Office",
+        organizer: "Hunter Financial Aid Office",
+        desc: "Drop in for help with your FAFSA/TAP. Get your questions answered quickly by our Financial Aid staff.",
+        keywords: ["fafsa", "tap", "financial aid", "in-person", "helpdesk", "wednesday"],
+        type: "helpdesk",
+        format: "in-person",
+        audience: "all-students",
+        xpPoints: 100
+      },
+
+      // ===== ARTS & CULTURE EVENTS =====
+      {
+        title: "Arts Outing: Madama Butterfly at the Met Opera",
+        category: "Arts & Culture",
+        date: "Check website for dates",
+        time: "Meet at 10:00 AM",
+        location: "Metropolitan Opera & Hunter College",
+        organizer: "Hunter Office of the Arts",
+        desc: "Join Hunter students for a special outing at the Met Opera to experience Giacomo Puccini's iconic opera Madama Butterfly. The Office of the Arts has purchased a limited number of tickets for students.",
+        keywords: ["arts", "opera", "met opera", "madama butterfly", "outing", "cultural", "performance"],
+        type: "outing",
+        format: "in-person",
+        audience: "undergraduate",
+        xpPoints: 150
+      },
+      {
+        title: "Arts Outing: La Traviata at the Met Opera",
+        category: "Arts & Culture",
+        date: "Check website for dates",
+        time: "Performance time varies",
+        location: "Metropolitan Opera",
+        organizer: "Hunter Office of the Arts",
+        desc: "Join Hunter students for a special outing at the Met Opera to experience Giuseppe Verdi's iconic opera La Traviata.",
+        keywords: ["arts", "opera", "met opera", "la traviata", "outing", "cultural", "verdi"],
+        type: "outing",
+        format: "in-person",
+        audience: "undergraduate",
+        xpPoints: 150
+      },
+      {
+        title: "We the People: An Assembly of New York Artists",
+        category: "Arts & Culture",
+        date: "Check website for date",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "Hunter College Office of the Arts",
+        desc: "The Hunter College Office of the Arts invites all New York artists and arts workers to speak out at this public assembly.",
+        keywords: ["arts", "assembly", "artists", "new york", "public forum", "arts workers"],
+        type: "forum",
+        format: "in-person",
+        audience: "all-students",
+        xpPoints: 100
+      },
+
+      // ===== PROFESSIONAL EVENTS =====
+      {
+        title: "Spring 2026 HEO Forum Meeting",
+        category: "Professional",
+        date: "Spring 2026",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "HEO Forum",
+        desc: "Professional development meeting with various speakers from Hunter College administration.",
+        keywords: ["heo", "forum", "professional", "meeting", "administration", "spring"],
+        type: "meeting",
+        format: "in-person",
+        audience: "all-students",
+        xpPoints: 125
+      },
+
+      // ===== GRADUATE PROGRAM EVENTS =====
+      {
+        title: "MS-IPND Graduate Nutrition Program Information Sessions",
+        category: "Graduate Programs",
+        date: "Multiple dates (Jan-Aug)",
+        time: "Various times (12pm, 1pm, 6pm)",
+        location: "Online",
+        organizer: "Hunter College Nutrition Program",
+        desc: "Join us for an information session re: our Graduate Nutrition tracks Integrated Program in Nutrition and Dietetics (IPND); Focus Study ONLINE Sessions",
+        keywords: ["nutrition", "dietetics", "graduate", "information session", "ms-ipnd", "online"],
+        type: "info-session",
+        format: "virtual",
+        audience: "prospective",
+        xpPoints: 80
+      },
+      {
+        title: "Graduate Nursing Information Session",
+        category: "Graduate Programs",
+        date: "Check website for dates",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "Hunter College Nursing Program",
+        desc: "This information session is tailored for prospective students interested in the master's, advanced certificate, and DNP specialties.",
+        keywords: ["nursing", "graduate", "information session", "in-person", "dnp", "master's"],
+        type: "info-session",
+        format: "in-person",
+        audience: "prospective",
+        xpPoints: 80
+      },
+
+      // ===== ALUMNI EVENTS =====
+      {
+        title: "Hunter Alumni and Friends Networking Social – Tampa",
+        category: "Alumni",
+        date: "Check website for date",
+        time: "Evening",
+        location: "Luna Lounge at Bulla Gastrobar, Tampa, FL",
+        organizer: "Hunter College Alumni Affairs",
+        desc: "Celebrate, Connect & Enjoy the Coastal Vibes! Hunter's Back in the Bay – Let's Toast to Year Two! Join your fellow alumni in Tampa for our second annual Alumni Social.",
+        keywords: ["alumni", "tampa", "networking", "social", "florida", "reunion"],
+        type: "social",
+        format: "in-person",
+        audience: "alumni",
+        xpPoints: 200
+      },
+      {
+        title: "Hunter Alumni and Friends Networking Social – Orlando",
+        category: "Alumni",
+        date: "Check website for date",
+        time: "Evening",
+        location: "Orlando, FL",
+        organizer: "Hunter College Alumni Affairs",
+        desc: "Hunter + Orlando = A Magical Night! With more than 1,500 alumni and friends in Orlando, this is your chance to reconnect, mingle, reminisce, and celebrate.",
+        keywords: ["alumni", "orlando", "networking", "social", "florida", "reunion"],
+        type: "social",
+        format: "in-person",
+        audience: "alumni",
+        xpPoints: 200
+      },
+
+      // ===== ACADEMIC & LECTURE EVENTS =====
+      {
+        title: "Promoting Civil Discourse & Intellectual Dialogue Series - States of Incarceration",
+        category: "Academic",
+        date: "Check website for date",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "Hunter College",
+        desc: "States of Incarceration: Connecting Stories of Immigration Detention and Mass Incarceration and the Movements Against Them.",
+        keywords: ["civil discourse", "incarceration", "immigration", "lecture", "dialogue", "academic"],
+        type: "lecture",
+        format: "in-person",
+        audience: "all-students",
+        xpPoints: 120
+      },
+      {
+        title: "Promoting Civil Discourse & Intellectual Dialogue Series - The Future of Conversion Therapy Bans in the US",
+        category: "Academic",
+        date: "Check website for date",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "Hunter College",
+        desc: "The Future of Conversion Therapy Bans in the US. Over the last several years, 23 states have barred licensed mental health professionals from providing conversion therapy.",
+        keywords: ["civil discourse", "conversion therapy", "lgbtq", "lecture", "dialogue", "academic"],
+        type: "lecture",
+        format: "in-person",
+        audience: "all-students",
+        xpPoints: 120
+      },
+      {
+        title: "Study Abroad Fair",
+        category: "Academic",
+        date: "Check website for date",
+        time: "To be announced",
+        location: "Hunter College",
+        organizer: "Hunter College Study Abroad Office",
+        desc: "Are you interested in exploring the world that lies beyond the classroom? Join us at the Hunter College Annual Study Abroad Fair to learn about hundreds of opportunities!",
+        keywords: ["study abroad", "international", "fair", "travel", "education abroad", "academic"],
+        type: "fair",
+        format: "in-person",
+        audience: "undergraduate",
+        xpPoints: 90
+      }
+    ];
+
+    // DOM Elements
+    const eventsGrid = document.getElementById("eventsGrid");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const searchInput = document.getElementById("searchInput");
+    const emptyState = document.getElementById("emptyState");
+    const resetBtn = document.getElementById("resetBtn");
+    
+    // New filter elements
+    const dateFilter = document.getElementById("dateFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const formatFilter = document.getElementById("formatFilter");
+    const xpFilter = document.getElementById("xpFilter");
+    const applyFiltersBtn = document.getElementById("applyFilters");
+    const clearAllFiltersBtn = document.getElementById("clearAllFilters");
+    const searchTags = document.querySelectorAll(".tag");
+
+    // Current active filters
+    let activeFilters = {
+      category: "all",
+      search: "",
+      date: "all",
+      type: "all",
+      format: "all",
+      xp: "all"
+    };
+
+    // Parse date strings to Date objects
+    function parseDate(dateStr) {
+      if (dateStr === "Mondays" || dateStr === "Wednesdays") return null;
+      if (dateStr.includes("Spring 2026")) return new Date(2026, 3, 1);
+      if (dateStr.includes("Check website")) return null;
+      if (dateStr.includes("Multiple dates")) return new Date(2026, 0, 12);
+      return new Date();
+    }
+
+    // Get date range based on filter
+    function getDateRange(filter) {
+      const today = new Date();
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      switch(filter) {
+        case "today":
+          return { start: today, end: today };
+        case "thisWeek":
+          return { start: startOfWeek, end: endOfWeek };
+        case "nextWeek":
+          const nextWeekStart = new Date(startOfWeek);
+          nextWeekStart.setDate(startOfWeek.getDate() + 7);
+          const nextWeekEnd = new Date(endOfWeek);
+          nextWeekEnd.setDate(endOfWeek.getDate() + 7);
+          return { start: nextWeekStart, end: nextWeekEnd };
+        case "thisMonth":
+          return { start: startOfMonth, end: endOfMonth };
+        default:
+          return null;
+      }
+    }
+
+    // Check if date is in range
+    function isDateInRange(eventDate, range) {
+      if (!range || !eventDate) return true;
+      return eventDate >= range.start && eventDate <= range.end;
+    }
+
+    // Get XP range based on filter
+    function getXpRange(filter) {
+      switch(filter) {
+        case "low":
+          return { min: 50, max: 100 };
+        case "medium":
+          return { min: 101, max: 200 };
+        case "high":
+          return { min: 201, max: 1000 };
+        default:
+          return null;
+      }
+    }
+
+    // Check if XP is in range
+    function isXpInRange(xpPoints, range) {
+      if (!range) return true;
+      return xpPoints >= range.min && xpPoints <= range.max;
+    }
+
+    // Highlight search terms in text
+    function highlightText(text, searchTerms) {
+      if (!searchTerms.length) return text;
+      
+      let highlighted = text;
+      searchTerms.forEach(term => {
+        if (term.length > 2) {
+          const regex = new RegExp(`(${term})`, 'gi');
+          highlighted = highlighted.replace(regex, '<span class="keyword-highlight">$1</span>');
+        }
+      });
+      return highlighted;
+    }
+
+    // Apply all filters
+    function applyAllFilters() {
+      const category = categoryFilter.value;
+      const search = searchInput.value.trim().toLowerCase();
+      const date = dateFilter.value;
+      const type = typeFilter.value;
+      const format = formatFilter.value;
+      const xp = xpFilter.value;
+      
+      // Update active filters
+      activeFilters = { category, search, date, type, format, xp };
+      
+      const dateRange = getDateRange(date);
+      const xpRange = getXpRange(xp);
+      const searchTerms = search.split(/\s+/).filter(term => term.length > 2);
+      
+      const filtered = EVENTS.filter(e => {
+        // Category filter
+        const matchesCategory = (category === "all") || (e.category === category);
+        
+        // Keyword search filter
+        const searchText = `${e.title} ${e.desc} ${e.organizer} ${e.location} ${e.keywords?.join(' ') || ''}`.toLowerCase();
+        const matchesSearch = !search || searchTerms.some(term => searchText.includes(term));
+        
+        // Date filter
+        const eventDate = parseDate(e.date);
+        const matchesDate = isDateInRange(eventDate, dateRange);
+        
+        // Type filter
+        const matchesType = (type === "all") || (e.type === type);
+        
+        // Format filter
+        const matchesFormat = (format === "all") || (e.format === format);
+        
+        // XP filter
+        const matchesXp = isXpInRange(e.xpPoints, xpRange);
+        
+        return matchesCategory && matchesSearch && matchesDate && matchesType && matchesFormat && matchesXp;
+      });
+      
+      render(filtered, searchTerms);
+    }
+
+    // Render events with optional highlighting
+    function render(events, searchTerms = []) {
+      eventsGrid.innerHTML = "";
+
+      if (!events.length) {
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+
+      events.forEach(e => {
+        const card = document.createElement("article");
+        card.className = "event-card";
+        
+        // Highlight search terms in title and description
+        const highlightedTitle = highlightText(e.title, searchTerms);
+        const highlightedDesc = highlightText(e.desc, searchTerms);
+        
+        // Format badge
+        const formatBadge = e.format === "virtual" ? 
+          `<span class="virtual-badge">Virtual</span>` : 
+          `<span class="inperson-badge">In-Person</span>`;
+        
+        card.innerHTML = `
+          <div class="event-top">
+            <span class="event-badge">${e.category}</span>
+            <span class="event-date">${e.date}</span>
+          </div>
+
+          <h3 class="event-title">${highlightedTitle} ${formatBadge}</h3>
+          <p class="event-meta">
+            <span><strong>Time:</strong> ${e.time}</span>
+            <span><strong>Location:</strong> ${e.location}</span>
+            <span><strong>Organizer:</strong> ${e.organizer}</span>
+          </p>
+          <p class="event-desc">${highlightedDesc}</p>
+          
+          <div class="event-reward"><span class="xp-icon">⭐</span> Earn ${e.xpPoints} XP</div>
+
+          <div class="event-actions">
+            <button class="btn primary rsvp-btn" type="button" data-xp="${e.xpPoints}" data-title="${e.title}">RSVP for ${e.xpPoints} XP</button>
+            <button class="btn secondary" type="button">Details</button>
+          </div>
+        `;
+        eventsGrid.appendChild(card);
+      });
+      
+      // Add event listeners to RSVP buttons
+      document.querySelectorAll('.rsvp-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const xp = parseInt(this.getAttribute('data-xp'));
+          const title = this.getAttribute('data-title');
+          alert(`🎉 Successfully RSVP'd to "${title}"!\nYou will earn ${xp} XP after attending.`);
+          // In a real app, you would send this to a server and update user's XP
+        });
+      });
+    }
+
+    // Clear all filters
+    function clearAllFilters() {
+      categoryFilter.value = "all";
+      searchInput.value = "";
+      dateFilter.value = "all";
+      typeFilter.value = "all";
+      formatFilter.value = "all";
+      xpFilter.value = "all";
+      
+      // Remove active tags
+      searchTags.forEach(tag => tag.classList.remove("active"));
+      
+      applyAllFilters();
+    }
+
+    // Event listeners
+    categoryFilter.addEventListener("change", applyAllFilters);
+    searchInput.addEventListener("input", applyAllFilters);
+    applyFiltersBtn.addEventListener("click", applyAllFilters);
+    clearAllFiltersBtn.addEventListener("click", clearAllFilters);
+    resetBtn?.addEventListener("click", clearAllFilters);
+
+    // Tag click handlers
+    searchTags.forEach(tag => {
+      tag.addEventListener("click", () => {
+        // Remove active from all tags first
+        searchTags.forEach(t => t.classList.remove("active"));
+        // Activate clicked tag
+        tag.classList.add("active");
+        
+        // Check if tag is for category or search
+        if (tag.dataset.category) {
+          categoryFilter.value = tag.dataset.category;
+          searchInput.value = "";
+        } else if (tag.dataset.search) {
+          searchInput.value = tag.dataset.search;
+          categoryFilter.value = "all";
+        } else if (tag.dataset.xp) {
+          xpFilter.value = tag.dataset.xp;
+        }
+        
+        applyAllFilters();
+      });
+    });
+
+    // Keyboard shortcut for search
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape' && document.activeElement === searchInput) {
+        searchInput.value = '';
+        applyAllFilters();
+      }
+    });
+
+    // Initial render
+    applyAllFilters();
+  </script>
+</body>
+</html>
