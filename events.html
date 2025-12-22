@@ -279,7 +279,7 @@
 
     async function loadEvents() {
     try {
-      const res = await fetch("http://localhost:3001/events");
+      const res = await fetch("https://hats-and-ladders.onrender.com/events");
       const rawEvents = await res.json();
 
       //  NORMALIZE backend events → frontend format
@@ -716,7 +716,7 @@
         btn.addEventListener('click', () => {
           const eventId = Number(btn.dataset.id);
 
-          fetch("http://localhost:3001/rsvp", {
+          fetch("https://hats-and-ladders.onrender.com/rsvp", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
