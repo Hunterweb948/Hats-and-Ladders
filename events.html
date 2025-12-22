@@ -284,19 +284,22 @@
 
       //  NORMALIZE backend events → frontend format
       EVENTS = rawEvents.map(e => ({
-        id: e.id,
-        title: e.title,
-        category: e.category,
-        date: e.date,
-        time: e.time,
-        location: e.location,
-        organizer: e.organizer,
-        desc: "Attend this event to earn XP points.",
-        format: e.format,
-        type: e.type,
-        xpPoints: e.xpPoints,
-        keywords: [e.title.toLowerCase(), e.category.toLowerCase()]
-      }));
+  id: e.id,
+  title: e.title,
+  category: e.category,
+  date: e.date,
+  time: e.time,
+  location: e.location,
+  organizer: e.organizer,
+  desc: e.desc || "Attend this event to earn XP points.",
+  format: e.format,
+  type: e.type,
+  xpPoints: e.xpPoints,
+  keywords: Array.isArray(e.keywords)
+    ? e.keywords
+    : [String(e.title || "").toLowerCase(), String(e.category || "").toLowerCase()]
+}));
+
 
       applyAllFilters();
     } catch (err) {

@@ -13,7 +13,9 @@ app.get("/", (req, res) => {
   res.send("Hats & Ladders backend is running 🎩🪜");
 });
 
+// ===== Events =====
 const EVENTS = [
+  // ===== FINANCIAL AID EVENTS =====
   {
     id: 1,
     title: "FAFSA/TAP Helpdesk - Virtual Mondays",
@@ -22,8 +24,8 @@ const EVENTS = [
     time: "Various times",
     location: "Virtual - Zoom",
     organizer: "Hunter Financial Aid Office",
-    desc: "Drop in for help with your FAFSA/TAP. Get your questions answered quickly by our Financial Aid staff.",
-    keywords: ["fafsa", "tap", "financial aid", "virtual"],
+    desc: "Drop in for help with your FAFSA/TAP. Get your questions answered quickly by our Financial Aid staff. RSVP not required. Join virtual meeting at scheduled date/time.",
+    keywords: ["fafsa", "tap", "financial aid", "virtual", "helpdesk", "zoom", "monday"],
     type: "helpdesk",
     format: "virtual",
     audience: "all-students",
@@ -37,23 +39,25 @@ const EVENTS = [
     time: "Various times",
     location: "Financial Aid Office",
     organizer: "Hunter Financial Aid Office",
-    desc: "Drop in for help with your FAFSA/TAP in person.",
-    keywords: ["fafsa", "tap", "financial aid"],
+    desc: "Drop in for help with your FAFSA/TAP. Get your questions answered quickly by our Financial Aid staff.",
+    keywords: ["fafsa", "tap", "financial aid", "in-person", "helpdesk", "wednesday"],
     type: "helpdesk",
     format: "in-person",
     audience: "all-students",
     xpPoints: 100
   },
+
+  // ===== ARTS & CULTURE EVENTS =====
   {
     id: 3,
     title: "Arts Outing: Madama Butterfly at the Met Opera",
     category: "Arts & Culture",
     date: "Check website for dates",
     time: "Meet at 10:00 AM",
-    location: "Metropolitan Opera",
+    location: "Metropolitan Opera & Hunter College",
     organizer: "Hunter Office of the Arts",
-    desc: "Experience Puccini's Madama Butterfly with Hunter students.",
-    keywords: ["opera", "arts"],
+    desc: "Join Hunter students for a special outing at the Met Opera to experience Giacomo Puccini's iconic opera Madama Butterfly. The Office of the Arts has purchased a limited number of tickets for students.",
+    keywords: ["arts", "opera", "met opera", "madama butterfly", "outing", "cultural", "performance"],
     type: "outing",
     format: "in-person",
     audience: "undergraduate",
@@ -67,8 +71,8 @@ const EVENTS = [
     time: "Performance time varies",
     location: "Metropolitan Opera",
     organizer: "Hunter Office of the Arts",
-    desc: "Experience Verdi's La Traviata with Hunter students.",
-    keywords: ["opera", "arts"],
+    desc: "Join Hunter students for a special outing at the Met Opera to experience Giuseppe Verdi's iconic opera La Traviata.",
+    keywords: ["arts", "opera", "met opera", "la traviata", "outing", "cultural", "verdi"],
     type: "outing",
     format: "in-person",
     audience: "undergraduate",
@@ -76,20 +80,149 @@ const EVENTS = [
   },
   {
     id: 5,
+    title: "We the People: An Assembly of New York Artists",
+    category: "Arts & Culture",
+    date: "Check website for date",
+    time: "To be announced",
+    location: "Hunter College",
+    organizer: "Hunter College Office of the Arts",
+    desc: "The Hunter College Office of the Arts invites all New York artists and arts workers to speak out at this public assembly.",
+    keywords: ["arts", "assembly", "artists", "new york", "public forum", "arts workers"],
+    type: "forum",
+    format: "in-person",
+    audience: "all-students",
+    xpPoints: 100
+  },
+
+  // ===== PROFESSIONAL EVENTS =====
+  {
+    id: 6,
+    title: "Spring 2026 HEO Forum Meeting",
+    category: "Professional",
+    date: "Spring 2026",
+    time: "To be announced",
+    location: "Hunter College",
+    organizer: "HEO Forum",
+    desc: "Professional development meeting with various speakers from Hunter College administration.",
+    keywords: ["heo", "forum", "professional", "meeting", "administration", "spring"],
+    type: "meeting",
+    format: "in-person",
+    audience: "all-students",
+    xpPoints: 125
+  },
+
+  // ===== GRADUATE PROGRAM EVENTS =====
+  {
+    id: 7,
+    title: "MS-IPND Graduate Nutrition Program Information Sessions",
+    category: "Graduate Programs",
+    date: "Multiple dates (Jan-Aug)",
+    time: "Various times (12pm, 1pm, 6pm)",
+    location: "Online",
+    organizer: "Hunter College Nutrition Program",
+    desc: "Join us for an information session re: our Graduate Nutrition tracks Integrated Program in Nutrition and Dietetics (IPND); Focus Study ONLINE Sessions",
+    keywords: ["nutrition", "dietetics", "graduate", "information session", "ms-ipnd", "online"],
+    type: "info-session",
+    format: "virtual",
+    audience: "prospective",
+    xpPoints: 80
+  },
+  {
+    id: 8,
+    title: "Graduate Nursing Information Session",
+    category: "Graduate Programs",
+    date: "Check website for dates",
+    time: "To be announced",
+    location: "Hunter College",
+    organizer: "Hunter College Nursing Program",
+    desc: "This information session is tailored for prospective students interested in the master's, advanced certificate, and DNP specialties.",
+    keywords: ["nursing", "graduate", "information session", "in-person", "dnp", "master's"],
+    type: "info-session",
+    format: "in-person",
+    audience: "prospective",
+    xpPoints: 80
+  },
+
+  // ===== ALUMNI EVENTS =====
+  {
+    id: 9,
+    title: "Hunter Alumni and Friends Networking Social – Tampa",
+    category: "Alumni",
+    date: "Check website for date",
+    time: "Evening",
+    location: "Luna Lounge at Bulla Gastrobar, Tampa, FL",
+    organizer: "Hunter College Alumni Affairs",
+    desc: "Celebrate, Connect & Enjoy the Coastal Vibes! Hunter's Back in the Bay – Let's Toast to Year Two! Join your fellow alumni in Tampa for our second annual Alumni Social.",
+    keywords: ["alumni", "tampa", "networking", "social", "florida", "reunion"],
+    type: "social",
+    format: "in-person",
+    audience: "alumni",
+    xpPoints: 200
+  },
+  {
+    id: 10,
+    title: "Hunter Alumni and Friends Networking Social – Orlando",
+    category: "Alumni",
+    date: "Check website for date",
+    time: "Evening",
+    location: "Orlando, FL",
+    organizer: "Hunter College Alumni Affairs",
+    desc: "Hunter + Orlando = A Magical Night! With more than 1,500 alumni and friends in Orlando, this is your chance to reconnect, mingle, reminisce, and celebrate.",
+    keywords: ["alumni", "orlando", "networking", "social", "florida", "reunion"],
+    type: "social",
+    format: "in-person",
+    audience: "alumni",
+    xpPoints: 200
+  },
+
+  // ===== ACADEMIC & LECTURE EVENTS =====
+  {
+    id: 11,
+    title: "Promoting Civil Discourse & Intellectual Dialogue Series - States of Incarceration",
+    category: "Academic",
+    date: "Check website for date",
+    time: "To be announced",
+    location: "Hunter College",
+    organizer: "Hunter College",
+    desc: "States of Incarceration: Connecting Stories of Immigration Detention and Mass Incarceration and the Movements Against Them.",
+    keywords: ["civil discourse", "incarceration", "immigration", "lecture", "dialogue", "academic"],
+    type: "lecture",
+    format: "in-person",
+    audience: "all-students",
+    xpPoints: 120
+  },
+  {
+    id: 12,
+    title: "Promoting Civil Discourse & Intellectual Dialogue Series - The Future of Conversion Therapy Bans in the US",
+    category: "Academic",
+    date: "Check website for date",
+    time: "To be announced",
+    location: "Hunter College",
+    organizer: "Hunter College",
+    desc: "The Future of Conversion Therapy Bans in the US. Over the last several years, 23 states have barred licensed mental health professionals from providing conversion therapy.",
+    keywords: ["civil discourse", "conversion therapy", "lgbtq", "lecture", "dialogue", "academic"],
+    type: "lecture",
+    format: "in-person",
+    audience: "all-students",
+    xpPoints: 120
+  },
+  {
+    id: 13,
     title: "Study Abroad Fair",
     category: "Academic",
     date: "Check website for date",
     time: "To be announced",
     location: "Hunter College",
     organizer: "Hunter College Study Abroad Office",
-    desc: "Learn about study abroad opportunities.",
-    keywords: ["study abroad", "academic"],
+    desc: "Are you interested in exploring the world that lies beyond the classroom? Join us at the Hunter College Annual Study Abroad Fair to learn about hundreds of opportunities!",
+    keywords: ["study abroad", "international", "fair", "travel", "education abroad", "academic"],
     type: "fair",
     format: "in-person",
     audience: "undergraduate",
     xpPoints: 90
   }
 ];
+
 
 
 const users = {
