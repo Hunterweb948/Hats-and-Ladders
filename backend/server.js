@@ -104,12 +104,18 @@ app.get("/recommendations/:userId", (req, res) => {
   res.json(recommended.slice(0, 3));
 });
 
-app.get("/users/:userId", (req, res) => {
-  const user = users[req.params.userId];
-  if (!user) return res.status(404).json({ error: "User not found" });
+
+// Get user profile
+app.get("/users/:id", (req, res) => {
+  const user = users[req.params.id];
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
   res.json(user);
 });
+
 
 // ===== Start Server =====
 app.listen(PORT, () => {
