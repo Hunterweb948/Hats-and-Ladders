@@ -5,10 +5,11 @@
 
 body {
   margin: 0;
+  padding-top: 90px; /* FIXED HEADER OFFSET */
   font-family: 'Poppins', sans-serif;
   background-color: #faf7ff;
   color: #333;
-  overflow-x: hidden; /* prevents header cutoff */
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 :root {
@@ -612,4 +613,42 @@ footer {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 40px;
+}
+
+/* ===== Profile Page (FORCED) ===== */
+.profile-container {
+  min-height: calc(100vh - 160px);
+}
+
+
+.profile-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.profile-card h1 {
+  margin-bottom: 20px;
+}
+
+#xp {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* ===== Header Nav Fix ===== */
+header nav a,
+.nav-link {
+  color: white !important;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+header nav a:hover,
+.nav-link:hover {
+  text-decoration: underline;
 }
