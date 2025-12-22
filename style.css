@@ -615,29 +615,36 @@ footer {
   padding: 40px;
 }
 
-/* ===== Profile Page (FORCED) ===== */
+/* ===== Profile Page FINAL FIX ===== */
 .profile-container {
-  min-height: calc(100vh - 160px);
+  padding-top: 180px; /* MUST be > header height */
+  padding-bottom: 80px;
 }
-
 
 .profile-card {
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
+  background: white;
   padding: 40px;
-  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-}
-
-.profile-card h1 {
-  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  text-align: center;
 }
 
 #xp {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
+  margin-top: 20px;
+  color: #4f2d7f;
 }
+
+.profile-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 
 /* ===== Header Nav Fix ===== */
 header nav a,
