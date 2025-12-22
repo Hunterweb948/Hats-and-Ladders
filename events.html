@@ -274,8 +274,39 @@
   </footer>
 
   <script>
+    // Events loaded from backend
+    let EVENTS = [];
+
+    async function loadEvents() {
+    try {
+      const res = await fetch("http://localhost:3001/events");
+      const rawEvents = await res.json();
+
+      //  NORMALIZE backend events → frontend format
+      EVENTS = rawEvents.map(e => ({
+        id: e.id,
+        title: e.title,
+        category: e.category,
+        date: e.date,
+        time: e.time,
+        location: e.location,
+        organizer: e.organizer,
+        desc: "Attend this event to earn XP points.",
+        format: e.format,
+        type: e.type,
+        xpPoints: e.xpPoints,
+        keywords: [e.title.toLowerCase(), e.category.toLowerCase()]
+      }));
+
+      applyAllFilters();
+    } catch (err) {
+      console.error("Failed to load events:", err);
+    }
+  }
+
+
     // REAL Hunter College Events with XP Points System
-    const EVENTS = [
+    /*const EVENTS = [
       // ===== FINANCIAL AID EVENTS =====
       {
         title: "FAFSA/TAP Helpdesk - Virtual Mondays",
@@ -469,7 +500,7 @@
         audience: "undergraduate",
         xpPoints: 90
       }
-    ];
+    ];*/
 
     // DOM Elements
     const eventsGrid = document.getElementById("eventsGrid");
@@ -499,8 +530,9 @@
 
     // Parse date strings to Date objects
     function parseDate(dateStr) {
+      if (!dateStr || typeof dateStr !== "string") return null;
       if (dateStr === "Mondays" || dateStr === "Wednesdays") return null;
-      if (dateStr.includes("Spring 2026")) return new Date(2026, 3, 1);
+      if (dateStr.includes("Spring")) return new Date(2026, 3, 1);
       if (dateStr.includes("Check website")) return null;
       if (dateStr.includes("Multiple dates")) return new Date(2026, 0, 12);
       return new Date();
@@ -596,18 +628,23 @@
         const matchesCategory = (category === "all") || (e.category === category);
         
         // Keyword search filter
-        const searchText = `${e.title} ${e.desc} ${e.organizer} ${e.location} ${e.keywords?.join(' ') || ''}`.toLowerCase();
+        const searchText = `
+        ${e.title || ""}
+        ${e.desc || ""}
+        ${e.organizer || ""}
+        ${e.location || ""}
+        ${(e.keywords && Array.isArray(e.keywords)) ? e.keywords.join(" ") : ""}
+        `.toLowerCase();
+
         const matchesSearch = !search || searchTerms.some(term => searchText.includes(term));
         
         // Date filter
         const eventDate = parseDate(e.date);
         const matchesDate = isDateInRange(eventDate, dateRange);
         
-        // Type filter
-        const matchesType = (type === "all") || (e.type === type);
-        
-        // Format filter
-        const matchesFormat = (format === "all") || (e.format === format);
+        const matchesType = (type === "all") || (e.type && e.type === type);
+        const matchesFormat = (format === "all") || (e.format && e.format === format);
+
         
         // XP filter
         const matchesXp = isXpInRange(e.xpPoints, xpRange);
@@ -641,7 +678,7 @@
         const formatBadge = e.format === "virtual" ? 
           `<span class="virtual-badge">Virtual</span>` : 
           `<span class="inperson-badge">In-Person</span>`;
-        
+        console.log("Rendering event:", e.id, e.xpPoints);
         card.innerHTML = `
           <div class="event-top">
             <span class="event-badge">${e.category}</span>
@@ -650,16 +687,24 @@
 
           <h3 class="event-title">${highlightedTitle} ${formatBadge}</h3>
           <p class="event-meta">
-            <span><strong>Time:</strong> ${e.time}</span>
-            <span><strong>Location:</strong> ${e.location}</span>
-            <span><strong>Organizer:</strong> ${e.organizer}</span>
+            <span><strong>Time:</strong> ${e.time || "TBA"}</span>
+            <span><strong>Location:</strong> ${e.location || "TBA"}</span>
+            <span><strong>Organizer:</strong> ${e.organizer || "Hunter College"}</span>
           </p>
-          <p class="event-desc">${highlightedDesc}</p>
-          
-          <div class="event-reward"><span class="xp-icon">⭐</span> Earn ${e.xpPoints} XP</div>
+          <p class="event-desc">${highlightedDesc || "Attend this event to earn XP points."}</p>
+
+          <div class="event-reward">
+            <span class="xp-icon">⭐</span> Earn ${e.xpPoints} XP
+          </div>
 
           <div class="event-actions">
-            <button class="btn primary rsvp-btn" type="button" data-xp="${e.xpPoints}" data-title="${e.title}">RSVP for ${e.xpPoints} XP</button>
+            <button
+              class="btn primary rsvp-btn"
+              type="button"
+              data-id="${e.id}"
+            >
+              RSVP for ${e.xpPoints} XP
+            </button>
             <button class="btn secondary" type="button">Details</button>
           </div>
         `;
@@ -668,11 +713,27 @@
       
       // Add event listeners to RSVP buttons
       document.querySelectorAll('.rsvp-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const xp = parseInt(this.getAttribute('data-xp'));
-          const title = this.getAttribute('data-title');
-          alert(`🎉 Successfully RSVP'd to "${title}"!\nYou will earn ${xp} XP after attending.`);
-          // In a real app, you would send this to a server and update user's XP
+        btn.addEventListener('click', () => {
+          const eventId = Number(btn.dataset.id);
+
+          fetch("http://localhost:3001/rsvp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              eventId,
+              userId: 1
+            })
+          })
+            .then(res => res.json())
+            .then(data => {
+              alert(`🎉 RSVP successful!\nXP earned: ${data.xpEarned}\nTotal XP: ${data.totalXp}`);
+              btn.disabled = true;
+              btn.textContent = "RSVP Confirmed ✅";
+            })
+            .catch(err => {
+              console.error(err);
+              alert("RSVP failed");
+            });
         });
       });
     }
@@ -734,8 +795,8 @@
       }
     });
 
-    // Initial render
-    applyAllFilters();
+    // Initial load
+    document.addEventListener("DOMContentLoaded", loadEvents);
   </script>
 </body>
 </html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+</head>
+<body>
+  <h1>My Profile</h1>
+  <p id="xp">Loading XP...</p>
+
+  <script>
+    fetch("http://localhost:3001/users/1")
+      .then(res => res.json())
+      .then(user => {
+        document.getElementById("xp").textContent =
+          `Total XP: ${user.xp}`;
+      })
+      .catch(() => {
+        document.getElementById("xp").textContent = "Failed to load profile";
+      });
+  </script>
+</body>
+</html>
