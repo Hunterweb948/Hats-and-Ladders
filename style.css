@@ -659,3 +659,74 @@ header nav a:hover,
 .nav-link:hover {
   text-decoration: underline;
 }
+/* responsive */
+* { box-sizing: border-box; }
+img { max-width: 100%; height: auto; }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;          
+  padding: 12px 16px;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;            
+  justify-content: flex-end;
+}
+
+.nav-filter,
+.nav-select {
+  max-width: 100%;
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  header {
+    align-items: flex-start;
+  }
+
+  header nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .nav-link,
+  .login-btn {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-section {
+    margin: 12px auto;
+    padding: 14px;
+  }
+
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    min-width: 0;     
+    width: 100%;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .filter-buttons .btn {
+    width: 100%;
+  }
+}
+h1 { font-size: clamp(1.2rem, 2.6vw, 1.8rem); }
+h2 { font-size: clamp(1.4rem, 3.5vw, 2.2rem); }
+p  { font-size: clamp(0.95rem, 2.2vw, 1.05rem); }

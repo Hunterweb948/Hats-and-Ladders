@@ -266,3 +266,27 @@
   from { box-shadow: 0 0 15px gold; }
   to { box-shadow: 0 0 30px gold; }
 }
+@media (max-width: 768px) {
+  .coin-bar {
+    position: static;      /* stop overlaying */
+    margin: 90px auto 0;   /* keep it visible under header */
+    width: fit-content;
+    right: auto;
+    top: auto;
+  }
+
+  .shop-container {
+    padding: 30px 14px 40px; /* reduce huge top padding on mobile */
+  }
+}
+
+@media (max-width: 520px) {
+  .cards {
+    flex-wrap: wrap;       /* your pack opening cards */
+  }
+
+  .card {
+    width: 80px;
+    height: 120px;
+  }
+}
